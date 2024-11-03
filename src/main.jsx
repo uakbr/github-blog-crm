@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import '@/styles/globals.css';
+import { initializeAnalytics, trackEvent, trackPageView } from '@/utils/analytics';
 
 // Performance monitoring
 const reportWebVitals = (metric) => {
@@ -132,6 +133,16 @@ const preloadResources = () => {
 
 // Initialize preloading
 preloadResources();
+
+// Initialize analytics
+initializeAnalytics({
+  measurementId: process.env.VITE_GA_ID,
+  siteId: process.env.VITE_PLAUSIBLE_ID,
+  options: {
+    cookieConsent: true,
+    anonymizeIp: true
+  }
+});
 
 // Export for testing purposes
 export { reportWebVitals, logError };

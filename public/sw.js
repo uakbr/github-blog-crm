@@ -222,3 +222,17 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
+// Add better offline support
+const OFFLINE_VERSION = 1;
+const CACHE_NAME = `offline-${OFFLINE_VERSION}`;
+const OFFLINE_URL = 'offline.html';
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.add(new Request(OFFLINE_URL, { cache: 'reload' }));
+    })()
+  );
+});

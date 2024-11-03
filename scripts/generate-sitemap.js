@@ -35,6 +35,18 @@ async function generateSitemap() {
       })),
     ];
 
+    // Add image sitemap support
+    const imageEntries = [
+      ...posts.map(post => ({
+        url: `${baseUrl}/posts/${post.path.replace(/\.md$/, '')}`,
+        images: post.images.map(img => ({
+          loc: `${baseUrl}${img.path}`,
+          title: img.alt || '',
+          caption: img.caption || ''
+        }))
+      }))
+    ];
+
     // Generate sitemap XML
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

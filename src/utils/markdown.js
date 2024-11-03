@@ -5,6 +5,7 @@ import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
 import frontMatter from 'front-matter';
 import { github } from './github';
+import DOMPurify from 'dompurify';
 
 /**
  * Markdown processor class
@@ -128,8 +129,19 @@ class MarkdownProcessor {
    */
   async process(content, options = {}) {
     try {
-      // Parse frontmatter
+      // Add more specific error handling
+      if (!content) {
+        throw new Error('No content provided');
+      }
+      
+      // Add validation for required metadata
       const { attributes, body } = frontMatter(content);
+      const requiredFields = ['title', 'date'];
+      const missingFields = requiredFields.filter(field => !attributes[field]);
+      
+      if (missingFields.length > 0) {
+        throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+      }
       
       // Process markdown content
       const htmlContent = await marked(body);
@@ -141,15 +153,21 @@ class MarkdownProcessor {
       const metadata = await this.processMetadata(attributes);
 
       return {
-        content: htmlContent,
+        content: DOMPurify.sanitize(htmlContent, {
+          ADD_TAGS: ['math', 'mrow'], // Allow MathML
+          ADD_ATTR: ['xmlns'], // Allow specific attributes
+          FORBID_TAGS: ['style', 'script'], // Forbid dangerous tags
+          FORBID_ATTR: ['onerror', 'onload'] // Forbid dangerous attributes
+        }),
         metadata,
         toc,
         excerpt: this.generateExcerpt(body),
         readingTime: this.calculateReadingTime(body),
       };
     } catch (error) {
-      if (this.options.debug) {
-        console.error('Markdown processing error:', error);
+      // Add error categorization
+      if (error.code === 'ENOENT') {
+        throw new Error('File not found');
       }
       throw error;
     }

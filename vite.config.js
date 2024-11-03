@@ -46,6 +46,8 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           markdown: ['marked', 'marked-gfm-heading-id', 'marked-mangle'],
           ui: ['lucide-react', '@/components/ui'],
+          analytics: ['web-vitals'],
+          animation: ['framer-motion']
         },
       },
     },
