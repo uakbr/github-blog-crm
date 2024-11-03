@@ -1,0 +1,41 @@
+name: Update Posts Index
+
+on:
+  push:
+    paths:
+      - 'posts/**/*.md'
+      - 'content/**/*.md'
+  # Run every day at midnight
+  schedule:
+    - cron: '0 0 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-posts:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Generate Posts Index
+        run: node scripts/generate-posts-index.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add posts.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update posts index"
+          git push

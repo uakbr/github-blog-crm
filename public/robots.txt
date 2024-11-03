@@ -1,0 +1,28 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://uakbr.github.io/github-blog-crm/sitemap.xml
+
+# Disallow search-specific pages
+Disallow: /search
+Disallow: /api/
+Disallow: /cdn-cgi/
+
+# Crawl delay
+Crawl-delay: 10
+
+# Additional rules for specific bots
+User-agent: GPTBot
+Disallow: /private/
+Disallow: /drafts/
+
+User-agent: ChatGPT-User
+Disallow: /private/
+Disallow: /drafts/
+
+# Rate limiting directives
+User-agent: *
+Request-rate: 1/10
+Visit-time: 0600-2100

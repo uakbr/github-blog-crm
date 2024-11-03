@@ -1,0 +1,120 @@
+name: Deploy Blog CRM
+
+on:
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  generate-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g pwa-asset-generator
+      
+      - name: Generate Icons
+        run: node scripts/generate-icons.js
+      
+      - name: Upload assets artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: public-assets
+          path: |
+            public/icons
+            public/site.webmanifest
+            public/favicon.ico
+            public/favicon.svg
+
+  build:
+    needs: generate-assets
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install @vitejs/plugin-react @tailwindcss/typography @tailwindcss/forms
+      
+      - name: Download generated assets
+        uses: actions/download-artifact@v3
+        with:
+          name: public-assets
+          path: public
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Set Environment Variables
+        run: |
+          echo "VITE_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
+          echo "VITE_GITHUB_OWNER=${{ github.repository_owner }}" >> .env
+          echo "VITE_GITHUB_REPO=${{ github.event.repository.name }}" >> .env
+          echo "VITE_BASE_URL=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> .env
+      
+      - name: Build project
+        run: npm run build
+      
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.js
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./dist
+          destination: ./_site
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3

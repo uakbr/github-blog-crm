@@ -1,0 +1,342 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  [data-theme="dark"] {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply antialiased;
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Improved focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground;
+  }
+}
+
+/* Component Styles */
+@layer components {
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .card-hover:hover {
+    @apply transform -translate-y-1 shadow-lg;
+  }
+
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+
+  .btn-destructive {
+    @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
+  }
+
+  .btn-outline {
+    @apply border border-input hover:bg-accent hover:text-accent-foreground;
+  }
+
+  /* Input styles */
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm
+           ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium
+           placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Toggle styles */
+  .toggle {
+    @apply inline-flex items-center justify-center rounded-full p-1 text-muted-foreground
+           hover:bg-accent hover:text-accent-foreground;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors
+           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+
+  .badge-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/80;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+}
+
+/* Custom Animations */
+@layer utilities {
+  .animate-fade {
+    animation: fade 0.3s ease-in-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-scale {
+    animation: scale 0.2s ease-in-out;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Markdown Content Styles */
+.markdown {
+  @apply prose prose-slate dark:prose-invert max-w-none
+         prose-headings:scroll-mt-28 prose-headings:font-heading prose-headings:font-bold
+         prose-h1:text-4xl prose-h1:mb-8
+         prose-h2:text-3xl prose-h2:mb-4 prose-h2:mt-8
+         prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8
+         prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-6
+         prose-p:leading-7
+         prose-blockquote:border-l-primary
+         prose-blockquote:border-opacity-50
+         prose-blockquote:bg-muted 
+         prose-blockquote:py-2
+         prose-blockquote:px-4
+         prose-blockquote:rounded-r-lg
+         prose-code:bg-muted
+         prose-code:px-1.5
+         prose-code:py-0.5
+         prose-code:rounded-md
+         prose-code:before:content-none
+         prose-code:after:content-none
+         prose-pre:bg-muted
+         prose-pre:shadow-md
+         prose-img:rounded-lg
+         prose-img:shadow-lg
+         prose-a:text-primary
+         prose-a:no-underline
+         prose-a:font-normal
+         hover:prose-a:text-primary/80
+         prose-hr:border-border
+         prose-ul:my-6
+         prose-ol:my-6
+         prose-li:my-2;
+}
+
+.markdown pre {
+  @apply p-4 rounded-lg overflow-x-auto border bg-muted;
+}
+
+.markdown code {
+  @apply bg-muted px-[0.3rem] py-[0.2rem] rounded font-mono text-sm;
+}
+
+.markdown pre > code {
+  @apply bg-transparent p-0;
+}
+
+/* Table Styles */
+.table-wrapper {
+  @apply w-full overflow-auto;
+}
+
+.table {
+  @apply w-full text-sm border-collapse;
+}
+
+.table th {
+  @apply text-left bg-muted px-4 py-2 font-medium border;
+}
+
+.table td {
+  @apply px-4 py-2 border;
+}
+
+.table tbody tr:nth-child(odd) {
+  @apply bg-muted/50;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    @apply hidden;
+  }
+
+  .markdown {
+    @apply max-w-none mx-0;
+  }
+
+  .markdown a {
+    text-decoration: none;
+  }
+
+  .markdown a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    @apply text-sm text-muted-foreground;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+  .markdown {
+    @apply prose-sm;
+  }
+
+  .markdown pre {
+    @apply text-xs;
+  }
+
+  .table-wrapper {
+    @apply -mx-4;
+  }
+
+  .table {
+    @apply text-xs;
+  }
+}
