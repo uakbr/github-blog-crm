@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -68,8 +68,8 @@ import {
   MoreVertical,
 } from 'lucide-react';
 
-import { github } from '@/utils/github';
-import { markdown } from '@/utils/markdown';
+import { getMarkdownFiles, getRawContent, getFileMetadata } from '@/utils/github';
+import { processMarkdown } from '@/utils/markdown';
 import { cn, formatDate, truncate } from '@/lib/utils';
 
 // Animation variants for various components
@@ -171,17 +171,17 @@ const BlogCRM = () => {
     setError(null);
     try {
       // Get all markdown files from the repository
-      const files = await github.getMarkdownFiles();
+      const files = await getMarkdownFiles();
       
       // Process each file
       const postsData = await Promise.all(
         files.map(async (file) => {
           try {
-            const content = await github.getRawContent(file.path);
-            const processed = await markdown.process(content);
+            const content = await getRawContent(file.path);
+            const processed = await processMarkdown(content);
             
             // Get file metadata from GitHub
-            const metadata = await github.getFileMetadata(file.path);
+            const metadata = await getFileMetadata(file.path);
             
             return {
               id: file.sha,

@@ -5,7 +5,7 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   // Replace 'your-repo-name' with your actual repository name
-  base: '/your-repo-name/',
+  base: '/github-blog-crm/',
   
   plugins: [
     react({
