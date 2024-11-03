@@ -165,11 +165,6 @@ const BlogCRM = () => {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
-// ... (previous imports and initial setup)
-
-const BlogCRM = () => {
-  // ... (previous state and refs)
-
   // Data Fetching
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
@@ -333,14 +328,14 @@ const BlogCRM = () => {
   const handleSearch = useMemo(
     () =>
       debounce((term) => {
-        setFilters(prev => ({ ...prev, searchTerm: term }));
+        setFilters((prev) => ({ ...prev, searchTerm: term }));
       }, 300),
     []
   );
 
   // Filter updates
   const updateFilters = useCallback((newFilters) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFilters((prev) => ({ ...prev, ...newFilters }));
   }, []);
 
   // Reset filters
@@ -396,11 +391,6 @@ const BlogCRM = () => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isSearchOpen, selectedPost, handlePostDeselect]);
-
-// ... (previous code)
-
-const BlogCRM = () => {
-  // ... (previous state and logic)
 
   // Render Sidebar
   const SidebarContent = () => (
@@ -596,11 +586,6 @@ const BlogCRM = () => {
       </CommandList>
     </CommandDialog>
   );
-
-// ... (previous code)
-
-const BlogCRM = () => {
-  // ... (previous state, logic, and components)
 
   // Post Card Component
   const PostCard = ({ post, view = 'grid' }) => {
@@ -819,11 +804,6 @@ const BlogCRM = () => {
       </motion.div>
     );
   };
-
-// ... (previous code)
-
-const BlogCRM = () => {
-  // ... (previous state, logic, and components)
 
   // Post View Component
   const PostView = ({ post }) => {
